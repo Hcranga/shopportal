@@ -96,7 +96,7 @@ export default function SignInSide() {
             <BrowserRouter>
               <Switch>
                 <Route path="/shopuser" component={Admin} />
-                <Redirect from="/" to="/shopuser/grocerydashboard" />
+                <Redirect from="/" to="/shopuser/additem" />
               </Switch>
             </BrowserRouter>,
             document.getElementById("root")

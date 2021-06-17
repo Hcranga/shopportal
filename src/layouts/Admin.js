@@ -34,7 +34,7 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/shopuser" to="/shopuser/grocerydashboard" />
+    <Redirect from="/shopuser" to="/shopuser/additem" />
   </Switch>
 );
 

@@ -45,11 +45,12 @@ import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.js";
 import RTLPage from "views/RTLPage/RTLPage.js";
 
 const dashboardRoutes = [
+  
   {
-    path: "/grocerydashboard",
-    name: "Dashboard",
-    icon: Dashboard,
-    component: DashboardPage,
+    path: "/additem",
+    name: "Add Items",
+    icon: LibraryBooks,
+    component: AddItem,
     layout: "/shopuser",
   },
   {
@@ -59,13 +60,7 @@ const dashboardRoutes = [
     component: Orders,
     layout: "/shopuser",
   },
-  {
-    path: "/additem",
-    name: "Add Items",
-    icon: LibraryBooks,
-    component: AddItem,
-    layout: "/shopuser",
-  },
+  
   {
     path: "/earnings",
     name: "Earnings",
@@ -74,13 +69,6 @@ const dashboardRoutes = [
     layout: "/shopuser",
   },
 
-  {
-    path: "/accout",
-    name: "Account",
-    icon: BubbleChart,
-    component: Account,
-    layout: "/shopuser",
-  },
 ];
 
 export default dashboardRoutes;
