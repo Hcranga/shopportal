@@ -13,6 +13,8 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import Swal from 'sweetalert2'
+
 import avatar from "assets/img/faces/marc.jpg";
 import db from '../../firebaseconfig';
 
@@ -81,9 +83,17 @@ export default function AddItem() {
               db.collection('shops').doc(shopid).collection('Listed Items').add(itemData)
                 .then(ref => {
                   console.log('Added Product with ID: ', ref.id);
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Product Added!'
+                  });
                 })
                 .catch(err => {
                   console.log("product add error " + err);
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Product Added Failed!'
+                  });
                 })
             });
         }
