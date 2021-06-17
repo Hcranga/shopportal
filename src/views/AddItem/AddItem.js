@@ -42,28 +42,22 @@ const useStyles = makeStyles(styles);
 export default function AddItem() {
   const classes = useStyles();
   const shopid = localStorage.getItem('shopid');
-  const [imageurls, setURLs] = useState([]);
   const [item, setItem] = React.useState({
     itemName: "",
     manufacturer: "",
     itemPrice: "",
     realPrice: "",
     amount: "",
-    description: "",
-    file: []
+    description: ""
   })
+  const [image,setImage] = useState("");
 
   const submitButtonAction = (e) => {
     e.preventDefault();
-    console.log(item);
-    let pictures = item.file;
 
     let storageRef = firebase.storage().ref();
 
-    var urls = [];
-
-    for(let i=0;i<pictures.length;i++){
-      let uploadTask = storageRef.child("products/" + shopid+pictures[i].name).put(pictures[i]);
+    let uploadTask = storageRef.child("products/" + shopid+image.name).put(image);
       uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
         function (snapshot) {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -74,33 +68,27 @@ export default function AddItem() {
         },
         function (complete) {
             uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-              urls.push(downloadURL);
+              setImage(downloadURL);
+              var itemData = {
+                "image url":downloadURL,
+                "item Name":item.itemName,
+                "item manufacture":item.manufacturer,
+                "itemPrice" : item.itemPrice,
+                "description":item.description,
+                "amount":item.amount,
+                "admin_permission":false
+              }
+              db.collection('shops').doc(shopid).collection('Listed Items').add(itemData)
+                .then(ref => {
+                  console.log('Added Product with ID: ', ref.id);
+                })
+                .catch(err => {
+                  console.log("product add error " + err);
+                })
             });
         }
     );
-    }
-    setURLs(urls);
-    console.log(imageurls);
     
-    
-    
-    var itemData = {
-      "image url":imageurls,
-      "item Name":item.itemName,
-      "item manufacture":item.manufacturer,
-      "itemPrice" : item.itemPrice,
-      "realPrice": item.realPrice,
-      "description":item.description,
-      "amount":item.amount,
-      "admin_permission":false
-    }
-    db.collection('shops').doc(shopid).collection('Listed Items').add(itemData)
-      .then(ref => {
-        console.log('Added Product with ID: ', ref.id);
-      })
-      .catch(err => {
-        console.log("Sign up error " + err);
-      })
   }
 
   const handleItem = (evt) => {
@@ -112,7 +100,7 @@ export default function AddItem() {
   }
 
   const handleItemImages = (e) => {
-    setItem({ file: e.target.files });
+    setImage(e.target.files[0]);
   }
 
   return (
@@ -150,7 +138,7 @@ export default function AddItem() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText="Item Price"
                     name="itemPrice"
@@ -161,18 +149,7 @@ export default function AddItem() {
                     }}
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Real Price"
-                    name="realPrice"
-                    val={item.realPrice}
-                    handleChange={handleItem}
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText="Amount/Quantity"
                     name="amount"
@@ -208,7 +185,6 @@ export default function AddItem() {
                             </label>
                   <input
                     accept="image/*"
-                    multiple
                     onChange={handleItemImages}
                     className={classes.input}
                     id="file"
