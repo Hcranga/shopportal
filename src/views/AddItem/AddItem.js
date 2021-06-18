@@ -56,14 +56,74 @@ export default function AddItem() {
 
   const submitButtonAction = (e) => {
     e.preventDefault();
-
-    let storageRef = firebase.storage().ref();
+    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    if(item.itemName == ""){
+      Swal.fire({
+        icon: 'info',
+        title: 'Fill Item Name'
+      });
+    }
+    else if(item.manufacturer == ""){
+      Swal.fire({
+        icon: 'info',
+        title: 'Fill Manufacturer'
+      });
+    }
+    else if(item.itemPrice == ""){
+      Swal.fire({
+        icon: 'info',
+        title: 'Fill Price'
+      });
+    }
+    else if(isNaN(item.itemPrice)){
+      Swal.fire({
+        icon: 'info',
+        title: 'Check Price field'
+      });
+    }
+    else if(item.amount == ""){
+      Swal.fire({
+        icon: 'info',
+        title: 'Fill amount'
+      });
+    }
+    else if(isNaN(item.amount)){
+      Swal.fire({
+        icon: 'info',
+        title: 'Check amount field'
+      });
+    }
+    else if(format.test(item.amount)){
+      Swal.fire({
+        icon: 'info',
+        title: 'Check amount field'
+      });
+    }
+    else if(item.description==""){
+      Swal.fire({
+        icon: 'info',
+        title: 'Fill description'
+      });
+    }
+    else if(image.length == 0){
+      Swal.fire({
+        icon: 'info',
+        title: 'Choose an image'
+      });
+    }
+    else{
+      let storageRef = firebase.storage().ref();
 
     let uploadTask = storageRef.child("products/" + shopid+image.name).put(image);
       uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
         function (snapshot) {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log("upload is " + progress + " % done.");
+            Swal.fire({
+              icon: 'info',
+              title: 'Uploading',
+              html: progress
+            });
         },
         function (error) {
             console.log("Something went wrong..." + error);
@@ -98,6 +158,10 @@ export default function AddItem() {
             });
         }
     );
+    }
+    
+
+    
     
   }
 

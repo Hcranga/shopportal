@@ -66,9 +66,23 @@ export default function Orders() {
     db.collection('orders').where("shopId", "==", shopid).where("status", "==", "processing").get().then((querySnapshot) => {
       if (querySnapshot.empty) {
         console.log('No processing orders');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'No New Orders available',
+          showConfirmButton: false,
+          timer: 1500
+        })
       }
       else {
         console.log('processing orders available');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'New Orders available',
+          showConfirmButton: false,
+          timer: 1500
+        })
         const tempDoc = querySnapshot.docs.map((doc) => {
           return { mainid: doc.id, ...doc.data() }
         })

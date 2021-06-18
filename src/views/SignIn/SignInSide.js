@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Swal from 'sweetalert2'
+
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import db from '../../firebaseconfig';
@@ -65,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+
   const handleSubmit = (event) => {
     const formData = new FormData(event.target);
     const data = [];
@@ -73,6 +76,21 @@ export default function SignInSide() {
         data.push(value);
     }
     console.log(data[0]);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if(reg.test(data[0]) === false){
+      Swal.fire({
+        icon: 'info',
+        title: 'Invalid Email'
+      });
+    }
+    else if(data[1].length<6){
+      Swal.fire({
+        icon: 'info',
+        title: 'Password too short'
+      });
+    }
+    else{
+      
     db.collection('shops').get().then(function(querySnapshot) {
       if (!querySnapshot.empty) {
           const tempDoc = querySnapshot.docs.map((doc) => {
@@ -92,6 +110,13 @@ export default function SignInSide() {
         }
         if(status == 1){
           localStorage.setItem('shopid', data[0]);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Welcome',
+            showConfirmButton: false,
+            timer: 2500
+          })
           ReactDOM.render(
             <BrowserRouter>
               <Switch>
@@ -105,6 +130,13 @@ export default function SignInSide() {
         else if(status == 2){
           console.log("Move to pharmacy");
           localStorage.setItem('shopid', data[0]);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Welcome',
+            showConfirmButton: false,
+            timer: 2500
+          })
           ReactDOM.render(
             <BrowserRouter>
               <Switch>
@@ -117,12 +149,20 @@ export default function SignInSide() {
         }
         else{
           console.log("Shop not exist or dont have admin priviledges");
+          Swal.fire({
+            icon: 'info',
+            html: 'Shop not exist or dont have admin priviledges'
+          });
         }
       }
       else {
-          console.log("No Shops Exist");
+        Swal.fire({
+          icon: 'info',
+          title: 'No Registered Shops Available'
+        });
       }
   });
+    }
     
 }
 
