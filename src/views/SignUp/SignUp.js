@@ -61,47 +61,24 @@ export default function SignUp() {
     const [shopCategory, setShopCategory] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [nic, setNIC] = useState('');
     const [shoplogo, setShopLogo] = useState("");
-    const [certificates, setCertificates] = useState([]);
-    const [certificateurls, setCertificateURLS] = useState([]);
-    const [latitude, setLatitude] = useState(0);
-    const [longitude, setLongitude] = useState(0);
+    const [certificate, setCertificate] = useState("");
 
     const submitButtonAction = (e) => {
         e.preventDefault();
+        var latitude =0;
+        var longitude =0;
         navigator.geolocation.getCurrentPosition(function (position) {
-            setLatitude(position.coords.latitude);
-            setLongitude(position.coords.longitude);
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
+            latitude = position.coords.latitude
+            longitude = position.coords.longitude
 
         });
         let storageRef = firebase.storage().ref();
         let uploadTask = storageRef.child(email+"/" + "logo").put(shoplogo);
+        let uploadTask2 = storageRef.child(email+"/" + "certificate").put(certificate);
 
-        var tempurls = [];
-        var logourl = "";
-
-        for (let i = 0; i < certificates.length; i++) {
-            let uploadTask2 = storageRef.child(email+"/" + certificates[i].name).put(certificates[i]);
-            uploadTask2.on(firebase.storage.TaskEvent.STATE_CHANGED,
-                function (snapshot) {
-                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log("upload is " + progress + " % done.");
-                },
-                function (error) {
-                    console.log("Something went wrong..." + error);
-                },
-                function (complete) {
-                    uploadTask2.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                        tempurls.push(downloadURL);
-                    });
-                }
-            );
-        }
-        setCertificateURLS(tempurls);
-
-        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+        uploadTask2.on(firebase.storage.TaskEvent.STATE_CHANGED,
             function (snapshot) {
                 let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log("upload is " + progress + " % done.");
@@ -110,75 +87,80 @@ export default function SignUp() {
                 console.log("Something went wrong..." + error);
             },
             function (complete) {
-                uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                    console.log(downloadURL);
-                    // Here is where I wish I could store the downloadURL into the url variable declared earlier
-                    //url = downloadURL;
-                    logourl = downloadURL;
-                    var shopData = {
-                        email: email,
-                        "Shop Name": shopName,
-                        "Address": shopAddress,
-                        "Mobile Number": mobileNumber,
-                        "Shop Category": shopCategory,
-                        password: password,
-                        ShopDp: downloadURL,
-                        "admin permission": false,
-                        "location latitude": latitude,
-                        "location longtude": longitude,
-                        "certificate urls" : certificateurls
-                    }
-                    db.collection('shops').doc(email).set(shopData)
-                    .then(function () {
-                        console.log("record added");
-                      }).catch(err => {
-                        console.log("Server error " + err);
-                      });
+                uploadTask2.snapshot.ref.getDownloadURL().then(function (certificateURL) {
+
+                    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                        function (snapshot) {
+                            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log("upload is " + progress + " % done.");
+                        },
+                        function (error) {
+                            console.log("Something went wrong..." + error);
+                        },
+                        function (complete) {
+                            uploadTask.snapshot.ref.getDownloadURL().then(function (logoURL) {
+                                var shopData = {
+                                    email: email,
+                                    "Shop Name": shopName,
+                                    "Address": shopAddress,
+                                    "Mobile Number": mobileNumber,
+                                    "Shop Category": shopCategory,
+                                    "nic": nic,
+                                    password: password,
+                                    ShopDp: logoURL,
+                                    "admin permission": false,
+                                    "location latitude": latitude,
+                                    "location longtude": longitude,
+                                    "certificate url" : certificateURL
+                                }
+                                db.collection('shops').doc(email).set(shopData)
+                                .then(function () {
+                                    console.log("record added");
+                                  }).catch(err => {
+                                    console.log("Server error " + err);
+                                  });
+                            });
+                        }
+                    );
                 });
             }
-        );
-
-        
+        );        
     }
 
     const handleShopName = (e) => {
         setShopName(e.target.value);
-        console.log(e.target.value);
     }
 
     const handleShopAddress = (e) => {
         setShopAddress(e.target.value);
-        console.log(e.target.value);
     }
 
     const handleMobileNumber = (e) => {
         setMobileNumber(e.target.value);
-        console.log(e.target.value);
     }
 
     const handleShopCategory = (e) => {
         setShopCategory(e.target.value);
-        console.log(e.target.value);
     }
 
     const handleEmail = (e) => {
         setEmail(e.target.value);
-        console.log(e.target.value);
     }
 
     const handlePassword = (e) => {
         setPassword(e.target.value);
-        console.log(e.target.value);
+    }
+
+    const handleNIC = (e) => {
+        setNIC(e.target.value);
     }
 
     const handleShopLogoChange = (e) => {
         setShopLogo(e.target.files[0]);
-        console.log(e.target.value);
     }
 
     const handleCertificatesChange = (e) => {
-        setCertificates(e.target.files);
-        console.log(e.target.value);
+        setCertificate(e.target.files[0]);
     }
 
     return (
@@ -192,7 +174,7 @@ export default function SignUp() {
                     Sign up Shop
         </Typography>
                 <form className={classes.form} onSubmit={submitButtonAction}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={3}>
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 autoComplete="shopName"
@@ -221,7 +203,7 @@ export default function SignUp() {
                                 autoFocus
                             />
                         </Grid>
-                        <Grid item xs={12} sm={12}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 autoComplete="mobileNumber"
                                 name="mobileNumber"
@@ -235,7 +217,7 @@ export default function SignUp() {
                                 autoFocus
                             />
                         </Grid>
-                        <Grid item xs={12} sm={12}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl variant="outlined" className={classes.formControl} style={{ width: "100%" }}>
                                 <InputLabel htmlFor="outlined-age-native-simple">Shop Category</InputLabel>
                                 <Select
@@ -250,6 +232,19 @@ export default function SignUp() {
                                     <option value="Pharmacy">Pharmacy</option>
                                 </Select>
                             </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="nic"
+                                value={nic}
+                                onChange={handleNIC}
+                                label="NIC"
+                                name="nic"
+                                autoComplete="nic"
+                            />
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
@@ -298,7 +293,6 @@ export default function SignUp() {
                                 accept="image/*"
                                 className={classes.input}
                                 id="files"
-                                multiple
                                 onChange={handleCertificatesChange}
                                 type="file"
                             />
