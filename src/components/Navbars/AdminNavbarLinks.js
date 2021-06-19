@@ -21,6 +21,11 @@ import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import SignIn from "../../views/SignIn/SignInSide"
+import SignUp from "../../views/SignUp/SignUp"
+import ReactDOM from "react-dom";
+
 const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
@@ -47,6 +52,20 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+
+  const logouthandler = () => {
+    ReactDOM.render(
+      <BrowserRouter>
+        <Switch>
+          <Route path="/shopuser/signin" component={SignIn} />
+          <Route path="/shopuser/signup" component={SignUp} />
+          <Redirect from="/" to="/shopuser/signin" />
+        </Switch>
+      </BrowserRouter>,
+      document.getElementById("root")
+    );
+  }
+
   return (
     <div>
       <div className={classes.searchWrapper}>
@@ -201,7 +220,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={logouthandler}
                       className={classes.dropdownItem}
                     >
                       Logout
