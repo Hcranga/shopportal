@@ -115,7 +115,7 @@ export default function Orders() {
 
   const handleVehicleType = (e) => {
     setVehicleType(e.target.value);
-    console.log(e.target.value);
+    //console.log(e.target.value);
   }
 
   const buttonclickaction = (rowid) => {
@@ -127,18 +127,26 @@ export default function Orders() {
   }
 
   const ReadyButtonAction = (rowid) => {
-    console.log(vehicleType.length);
     if (vehicleType.length == 0) {
-      console.log("Select vehicle type");
+      Swal.fire({
+        icon: 'info',
+        title: 'Select Vehicle Type'
+      });
     }
     else {
       db.collection("orders").doc(rowid).set({
         status: "ready",
         assignedVehicleType: vehicleType
       }, { merge: true }).then(function () {
-        console.log("Order updated");
+        Swal.fire({
+          icon: 'success',
+          title: 'Order Updated'
+        });
       }).catch(err => {
-        console.log("Server error " + err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Server Error'
+        });
       });
     }
 
