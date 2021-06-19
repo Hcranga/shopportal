@@ -22,7 +22,7 @@ const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor, showbuttonAction, readybuttonAction, onVehicleTypeChange, selectedValue } = props;
+  const { tableHead, tableData, tableHeaderColor, showbuttonAction, readybuttonAction, onVehicleTypeChange } = props;
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
@@ -76,7 +76,6 @@ export default function CustomTable(props) {
                     <FormControl className={classes.formControl}>
                       <NativeSelect
                         name="vehicletype"
-                        value={selectedValue}
                         onChange={onVehicleTypeChange}
                         className={classes.selectEmpty}
                       >

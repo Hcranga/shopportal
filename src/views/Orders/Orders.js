@@ -115,7 +115,7 @@ export default function Orders() {
 
   const handleVehicleType = (e) => {
     setVehicleType(e.target.value);
-    //console.log(e.target.value);
+    console.log(e.target.value);
   }
 
   const buttonclickaction = (rowid) => {
@@ -170,7 +170,6 @@ export default function Orders() {
               showbuttonAction={buttonclickaction}
               readybuttonAction={ReadyButtonAction}
               onVehicleTypeChange={handleVehicleType}
-              selectedValue={vehicleType}
             />
           </CardBody>
         </Card>
