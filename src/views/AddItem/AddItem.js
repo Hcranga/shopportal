@@ -44,6 +44,7 @@ const useStyles = makeStyles(styles);
 export default function AddItem() {
   const classes = useStyles();
   const shopid = localStorage.getItem('shopid');
+  const imageInputRef1 = React.useRef();
   const [item, setItem] = React.useState({
     itemName: "",
     manufacturer: "",
@@ -53,6 +54,16 @@ export default function AddItem() {
     description: ""
   })
   const [image,setImage] = useState("");
+
+  const resetButtonAction = () => {
+    setItem({itemName: "",
+    manufacturer: "",
+    itemPrice: "",
+    realPrice: "",
+    amount: "",
+    description: ""});
+    imageInputRef1.current.value = "";
+  }
 
   const submitButtonAction = (e) => {
     e.preventDefault();
@@ -119,11 +130,6 @@ export default function AddItem() {
         function (snapshot) {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log("upload is " + progress + " % done.");
-            Swal.fire({
-              icon: 'info',
-              title: 'Uploading',
-              html: progress
-            });
         },
         function (error) {
             console.log("Something went wrong..." + error);
@@ -143,6 +149,7 @@ export default function AddItem() {
               db.collection('shops').doc(shopid).collection('Listed Items').add(itemData)
                 .then(ref => {
                   console.log('Added Product with ID: ', ref.id);
+                  resetButtonAction();
                   Swal.fire({
                     icon: 'success',
                     title: 'Product Added!'
@@ -261,6 +268,7 @@ export default function AddItem() {
                     accept="image/*"
                     onChange={handleItemImages}
                     className={classes.input}
+                    ref={imageInputRef1}
                     id="file"
                     type="file"
                   />

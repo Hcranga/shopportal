@@ -199,12 +199,6 @@ export default function AdminNavbarLinks() {
                     >
                       Profile
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
-                      Settings
-                    </MenuItem>
                     <Divider light />
                     <MenuItem
                       onClick={handleCloseProfile}

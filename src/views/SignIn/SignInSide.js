@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import icon from "assets/img/icon.png";
+
 import Swal from 'sweetalert2'
 
 import ReactDOM from "react-dom";
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: {icon},
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -47,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(15, 8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -145,7 +147,8 @@ export default function SignInSide() {
           console.log("Shop not exist or dont have admin priviledges");
           Swal.fire({
             icon: 'info',
-            html: 'Shop not exist or dont have admin priviledges'
+            title: 'Check Email & Password',
+            html: 'If you have trouble in Login, Contact your Administrator'
           });
         }
       }
@@ -207,20 +210,12 @@ export default function SignInSide() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/shopuser/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
-            <Box mt={5}>
-              <Copyright />
-            </Box>
           </form>
         </div>
       </Grid>

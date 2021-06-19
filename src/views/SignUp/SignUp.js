@@ -67,100 +67,113 @@ export default function SignUp() {
     const [shoplogo, setShopLogo] = useState("");
     const [certificate, setCertificate] = useState("");
 
+    const imageInputRef1 = React.useRef();
+    const imageInputRef2 = React.useRef();
+
     const submitButtonAction = (e) => {
         e.preventDefault();
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if(shoplogo.length == 0){
+        if (shoplogo.length == 0) {
             Swal.fire({
                 icon: 'info',
                 title: 'Please Upload Shop Logo'
-              });
+            });
         }
-        else if(certificate.length == 0){
+        else if (certificate.length == 0) {
             Swal.fire({
                 icon: 'info',
                 title: 'Please Upload Shop Certificate'
-              });
+            });
         }
-        else if(isNaN(mobileNumber)){
+        else if (isNaN(mobileNumber)) {
             Swal.fire({
                 icon: 'info',
                 title: 'Check Mobile Number'
-              });
+            });
         }
-        else if(reg.test(email) === false){
+        else if (reg.test(email) === false) {
             Swal.fire({
                 icon: 'info',
                 title: 'Invalid Email'
-              });
-        }
-        else if(password.length<6){
-            Swal.fire({
-              icon: 'info',
-              title: 'Password too short'
             });
-          }
-        else{
-            var latitude =0;
-        var longitude =0;
-        navigator.geolocation.getCurrentPosition(function (position) {
-            latitude = position.coords.latitude
-            longitude = position.coords.longitude
-
-        });
-        let storageRef = firebase.storage().ref();
-        let uploadTask = storageRef.child(email+"/" + "logo").put(shoplogo);
-        let uploadTask2 = storageRef.child(email+"/" + "certificate").put(certificate);
-
-        uploadTask2.on(firebase.storage.TaskEvent.STATE_CHANGED,
-            function (snapshot) {
-                let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log("upload is " + progress + " % done.");
-            },
-            function (error) {
-                console.log("Something went wrong..." + error);
-            },
-            function (complete) {
-                uploadTask2.snapshot.ref.getDownloadURL().then(function (certificateURL) {
-
-                    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-                        function (snapshot) {
-                            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            console.log("upload is " + progress + " % done.");
-                        },
-                        function (error) {
-                            console.log("Something went wrong..." + error);
-                        },
-                        function (complete) {
-                            uploadTask.snapshot.ref.getDownloadURL().then(function (logoURL) {
-                                var shopData = {
-                                    email: email,
-                                    "Shop Name": shopName,
-                                    "Address": shopAddress,
-                                    "Mobile Number": mobileNumber,
-                                    "Shop Category": shopCategory,
-                                    "nic": nic,
-                                    password: password,
-                                    ShopDp: logoURL,
-                                    "admin permission": false,
-                                    "location latitude": latitude,
-                                    "location longtude": longitude,
-                                    "certificate url" : certificateURL
-                                }
-                                db.collection('shops').doc(email).set(shopData)
-                                .then(function () {
-                                    console.log("record added");
-                                  }).catch(err => {
-                                    console.log("Server error " + err);
-                                  });
-                            });
-                        }
-                    );
-                });
-            }
-        );      
         }
-          
+        else if (password.length < 6) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Password too short'
+            });
+        }
+        else {
+            var latitude = 0;
+            var longitude = 0;
+            navigator.geolocation.getCurrentPosition(function (position) {
+                latitude = position.coords.latitude
+                longitude = position.coords.longitude
+
+            });
+            let storageRef = firebase.storage().ref();
+            let uploadTask = storageRef.child(email + "/" + "logo").put(shoplogo);
+            let uploadTask2 = storageRef.child(email + "/" + "certificate").put(certificate);
+
+            uploadTask2.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                function (snapshot) {
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log("upload is " + progress + " % done.");
+                },
+                function (error) {
+                    console.log("Something went wrong..." + error);
+                },
+                function (complete) {
+                    uploadTask2.snapshot.ref.getDownloadURL().then(function (certificateURL) {
+
+                        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                            function (snapshot) {
+                                let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                console.log("upload is " + progress + " % done.");
+                            },
+                            function (error) {
+                                console.log("Something went wrong..." + error);
+                            },
+                            function (complete) {
+                                uploadTask.snapshot.ref.getDownloadURL().then(function (logoURL) {
+                                    var shopData = {
+                                        email: email,
+                                        "Shop Name": shopName,
+                                        "Address": shopAddress,
+                                        "Mobile Number": mobileNumber,
+                                        "Shop Category": shopCategory,
+                                        "nic": nic,
+                                        password: password,
+                                        ShopDp: logoURL,
+                                        "admin permission": false,
+                                        "location latitude": latitude,
+                                        "location longtude": longitude,
+                                        "certificate url": certificateURL
+                                    }
+                                    db.collection('shops').doc(email).set(shopData)
+                                        .then(function () {
+                                            console.log("record added");
+                                            resetbutton();
+
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Sign Up Completed'
+                                            });
+                                        }).catch(err => {
+                                            console.log("Server error " + err);
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Sign up failed'
+                                            });
+                                        });
+                                });
+                            }
+                        );
+                    });
+                }
+            );
+        }
+
     }
 
     const handleShopName = (e) => {
@@ -197,6 +210,20 @@ export default function SignUp() {
 
     const handleCertificatesChange = (e) => {
         setCertificate(e.target.files[0]);
+    }
+
+    const resetbutton = () => {
+        setShopName('');
+        setShopAddress('');
+        setMobileNumber('');
+        setShopCategory('');
+        setEmail('');
+        setPassword('');
+        setNIC('');
+        setShopLogo("");
+        imageInputRef1.current.value = "";
+        imageInputRef2.current.value = "";
+        setCertificate("");
     }
 
     return (
@@ -317,6 +344,7 @@ export default function SignUp() {
                                 accept="image/*"
                                 className={classes.input}
                                 id="file"
+                                ref={imageInputRef1}
                                 onChange={handleShopLogoChange}
                                 type="file"
                             />
@@ -329,6 +357,7 @@ export default function SignUp() {
                                 accept="image/*"
                                 className={classes.input}
                                 id="files"
+                                ref={imageInputRef2}
                                 onChange={handleCertificatesChange}
                                 type="file"
                             />
@@ -343,6 +372,16 @@ export default function SignUp() {
                         className={classes.submit}
                     >
                         Sign Up
+                    </Button>
+                    <Button
+                        type="button"
+                        fullWidth
+                        variant="contained"
+                        onClick={resetbutton}
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Reset
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
