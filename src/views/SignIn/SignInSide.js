@@ -83,12 +83,6 @@ export default function SignInSide() {
         title: 'Invalid Email'
       });
     }
-    else if(data[1].length<6){
-      Swal.fire({
-        icon: 'info',
-        title: 'Password too short'
-      });
-    }
     else{
       
     db.collection('shops').get().then(function(querySnapshot) {

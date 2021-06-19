@@ -16,6 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import Swal from 'sweetalert2'
+
 import firebase from 'firebase'
 
 import db from '../../firebaseconfig';
@@ -67,7 +69,39 @@ export default function SignUp() {
 
     const submitButtonAction = (e) => {
         e.preventDefault();
-        var latitude =0;
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        if(shoplogo.length == 0){
+            Swal.fire({
+                icon: 'info',
+                title: 'Please Upload Shop Logo'
+              });
+        }
+        else if(certificate.length == 0){
+            Swal.fire({
+                icon: 'info',
+                title: 'Please Upload Shop Certificate'
+              });
+        }
+        else if(isNaN(mobileNumber)){
+            Swal.fire({
+                icon: 'info',
+                title: 'Check Mobile Number'
+              });
+        }
+        else if(reg.test(email) === false){
+            Swal.fire({
+                icon: 'info',
+                title: 'Invalid Email'
+              });
+        }
+        else if(password.length<6){
+            Swal.fire({
+              icon: 'info',
+              title: 'Password too short'
+            });
+          }
+        else{
+            var latitude =0;
         var longitude =0;
         navigator.geolocation.getCurrentPosition(function (position) {
             latitude = position.coords.latitude
@@ -124,7 +158,9 @@ export default function SignUp() {
                     );
                 });
             }
-        );        
+        );      
+        }
+          
     }
 
     const handleShopName = (e) => {
