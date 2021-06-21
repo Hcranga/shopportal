@@ -11,10 +11,30 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Swal from 'sweetalert2'
 
-import { Modal } from 'antd';
-import "antd/dist/antd.css";
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+
 
 import db from '../../firebaseconfig';
+
+const useStylesForModal = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    overflowY: 'scroll',
+    height: '200px',
+    width:'300px',
+    maxWidth: '300px',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 const styles = {
   cardCategoryWhite: {
@@ -53,28 +73,29 @@ const useStyles = makeStyles(styles);
 
 export default function Orders() {
   const classes = useStyles();
+  const classesForModal = useStylesForModal();
   const shopid = localStorage.getItem('shopid');
   console.log(shopid);
   const [processingorderDetails, setProcessingOrderDetails] = useState([]);
   const [allOrderDetails, setAllOrderDetails] = useState([]);
   const [vehicleType, setVehicleType] = useState('');
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState([]);
-
-  const showModal = (data) => {
-    setIsModalVisible(true);
-    console.log(data);
-    setModalData(data.itemsData);
-    
-  };
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
 
   useEffect(() => {
     getDataFromDb();
   }, []);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = (data) => {
+    setOpen(true);
+    setModalData(data.itemsData);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const getDataFromDb = () => {
     //get ongoing orders
@@ -137,7 +158,7 @@ export default function Orders() {
     console.log(rowid);
     //get order details
     db.collection('orders').doc(rowid).get().then((querySnapshot) => {
-      showModal(querySnapshot.data());
+      handleOpen(querySnapshot.data());
     }).catch(err => {
       console.log("Failed to retrive order details " + err);
     })
@@ -193,15 +214,28 @@ export default function Orders() {
               readybuttonAction={ReadyButtonAction}
               onVehicleTypeChange={handleVehicleType}
             />
-            <Modal bodyStyle={{ height: '200px', overflowY: 'scroll' }} cancelButtonProps={{hidden: true}} centered title="Ordered Items" visible={isModalVisible} onOk={handleOk}>
-              <div>
-                {modalData.map(itemDetails => <div>
-                   <p>Item Name : {itemDetails.item_name}</p> 
-                   <p>Manufacturer : {itemDetails.item_manufacture}</p> 
-                   <p>Amount : {itemDetails.amount}</p> 
-                   <p>Description : {itemDetails.description}</p><br/> 
-              </div>)}
-              </div>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              className={classesForModal.modal}
+              open={open}
+              onClose={handleClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+                timeout: 500,
+              }}
+            >
+              <Fade in={open}>
+                <div className={classesForModal.paper}>
+                  {modalData.map(itemDetails => <div>
+                    <p>Item Name : {itemDetails.item_name}</p>
+                    <p>Manufacturer : {itemDetails.item_manufacture}</p>
+                    <p>Amount : {itemDetails.amount}</p>
+                    <p>Description : {itemDetails.description}</p><br />
+                  </div>)}
+                </div>
+              </Fade>
             </Modal>
           </CardBody>
         </Card>
