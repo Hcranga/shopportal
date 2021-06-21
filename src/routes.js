@@ -68,6 +68,13 @@ const dashboardRoutes = [
     component: Earnings,
     layout: "/shopuser",
   },
+  {
+    path: "/help",
+    name: "Help",
+    icon: Notifications,
+    component: NotificationsPage,
+    layout: "/shopuser",
+  },
 
 ];
 

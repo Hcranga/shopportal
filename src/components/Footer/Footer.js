@@ -27,6 +27,9 @@ export default function Footer(props) {
             <ListItem className={classes.inlineBlock}>
             <Link to="/shopuser/earnings">Earnings</Link>
             </ListItem>
+            <ListItem className={classes.inlineBlock}>
+            <Link to="/shopuser/help">Help</Link>
+            </ListItem>
           </List>
         </div>
       </div>
