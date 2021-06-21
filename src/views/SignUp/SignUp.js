@@ -189,7 +189,6 @@ export default function SignUp() {
     }
 
     const handleShopCategory = (e) => {
-        console.log(e.target.value)
         setShopCategory(e.target.value);
     }
 
@@ -291,11 +290,9 @@ export default function SignUp() {
                                     onChange={handleShopCategory}
                                     value={shopCategory}
                                 >
-                                    <option aria-label="None" value=""></option>
+                                    <option aria-label="None" value="" />
                                     <option value="Grocery">Grocery</option>
                                     <option value="Pharmacy">Pharmacy</option>
-                                    <option value="Pharmacy">Electronics</option>
-                                    <option value="Pharmacy">Furniture</option>
                                 </Select>
                             </FormControl>
                         </Grid>

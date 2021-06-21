@@ -11,8 +11,6 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Swal from 'sweetalert2'
 
-import { Modal } from 'antd';
-import "antd/dist/antd.css";
 
 import db from '../../firebaseconfig';
 
@@ -58,19 +56,6 @@ export default function Orders() {
   const [processingorderDetails, setProcessingOrderDetails] = useState([]);
   const [allOrderDetails, setAllOrderDetails] = useState([]);
   const [vehicleType, setVehicleType] = useState('');
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalData, setModalData] = useState([]);
-
-  const showModal = (data) => {
-    setIsModalVisible(true);
-    console.log(data);
-    setModalData(data.itemsData);
-    
-  };
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
 
   useEffect(() => {
     getDataFromDb();
@@ -135,17 +120,10 @@ export default function Orders() {
 
   const buttonclickaction = (rowid) => {
     console.log(rowid);
-    //get order details
-    db.collection('orders').doc(rowid).get().then((querySnapshot) => {
-      showModal(querySnapshot.data());
-    }).catch(err => {
-      console.log("Failed to retrive order details " + err);
-    })
   }
 
   const showFromAllOrderedItems = (rowid) => {
     console.log(rowid);
-    buttonclickaction(rowid);
   }
 
   const ReadyButtonAction = (rowid) => {
@@ -193,16 +171,6 @@ export default function Orders() {
               readybuttonAction={ReadyButtonAction}
               onVehicleTypeChange={handleVehicleType}
             />
-            <Modal bodyStyle={{ height: '200px', overflowY: 'scroll' }} cancelButtonProps={{hidden: true}} centered title="Ordered Items" visible={isModalVisible} onOk={handleOk}>
-              <div>
-                {modalData.map(itemDetails => <div>
-                   <p>Item Name : {itemDetails.item_name}</p> 
-                   <p>Manufacturer : {itemDetails.item_manufacture}</p> 
-                   <p>Amount : {itemDetails.amount}</p> 
-                   <p>Description : {itemDetails.description}</p><br/> 
-              </div>)}
-              </div>
-            </Modal>
           </CardBody>
         </Card>
       </GridItem>
