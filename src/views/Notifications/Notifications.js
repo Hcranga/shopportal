@@ -123,221 +123,56 @@ export default function Notifications() {
   return (
     <Card>
       <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Notifications</h4>
-        <p className={classes.cardCategoryWhite}>
-          Handcrafted by our friends from{" "}
-          <a
-            target="_blank"
-            href="https://material-ui-next.com/?ref=creativetime"
-          >
-            Material UI
-          </a>{" "}
-          and styled by{" "}
-          <a
-            target="_blank"
-            href="https://www.creative-tim.com/?ref=mdr-notifications-page"
-          >
-            Creative Tim
-          </a>
-          . Please checkout the{" "}
-          <a href="#pablo" target="_blank">
-            full documentation
-          </a>
-          .
-        </p>
+        <h4 className={classes.cardTitleWhite}>Pharmacies</h4>
       </CardHeader>
       <CardBody>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
-            <h5>Notifications Style</h5>
-            <br />
-            <SnackbarContent message={"This is a plain notification"} />
-            <SnackbarContent
-              message={"This is a notification with close button."}
-              close
-            />
-            <SnackbarContent
-              message={"This is a notification with close button and icon."}
-              close
-              icon={AddAlert}
-            />
-            <SnackbarContent
-              message={
-                "This is a notification with close button and icon and have many lines. You can see that the icon and the close button are always vertically aligned. This is a beautiful notification. So you don't have to worry about the style."
-              }
-              close
-              icon={AddAlert}
-            />
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"Shop owners should be able to create an account and enter some basic information. After creating an account, shop owners should be able to submit their business details and add information as needed."} />
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <h5>Notifications States</h5>
-            <br />
-            <SnackbarContent
-              message={
-                'INFO - This is a regular notification made with color="info"'
-              }
-              close
-              color="info"
-            />
-            <SnackbarContent
-              message={
-                'SUCCESS - This is a regular notification made with color="success"'
-              }
-              close
-              color="success"
-            />
-            <SnackbarContent
-              message={
-                'WARNING - This is a regular notification made with color="warning"'
-              }
-              close
-              color="warning"
-            />
-            <SnackbarContent
-              message={
-                'DANGER - This is a regular notification made with color="danger"'
-              }
-              close
-              color="danger"
-            />
-            <SnackbarContent
-              message={
-                'PRIMARY - This is a regular notification made with color="primary"'
-              }
-              close
-              color="primary"
-            />
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"Among other things, the order management application should help pharmacies handle and manage orders, returns, refunds, and prescription verification."} />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"When a new order is received, the order notifications feature notifies pharmacy workers, which is crucial for efficient order processing."} />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"Prescription files should be accessible and verifiable by pharmacists."} />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"Customers will not be left alone with any troubles and should be able to contact administrators for clarification."} />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"A pharmacy should be able to take payments immediately through the app, obtain information on all active payments, and govern the flow of those funds."} />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"The order history provides pharmacy employees with access to all past orders."} />
           </GridItem>
         </GridContainer>
-        <br />
-        <br />
-        <GridContainer justify="center">
-          <GridItem xs={12} sm={12} md={6} style={{ textAlign: "center" }}>
-            <h5>
-              Notifications Places
-              <br />
-              <small>Click to view notifications</small>
-            </h5>
+      </CardBody>
+      <br />
+      <CardHeader color="primary">
+        <h4 className={classes.cardTitleWhite}>Grocery, Electronics, Furniture Shops</h4>
+      </CardHeader>
+      <CardBody>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"When you make an order through the app, a notification is sent to the shop's dedicated app. The establishment can either accept or decline the order. When an order is approved, it is handled by staff, and a bill is automatically printed."} />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+          <SnackbarContent message={"When a restaurant employee checks an order, an automatic message is sent to the nearest delivery person, who then arrives at the shop to pick up the items."}/>
           </GridItem>
         </GridContainer>
-        <GridContainer justify="center">
-          <GridItem xs={12} sm={12} md={10} lg={8}>
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={4}>
-                <Button
-                  fullWidth
-                  color="primary"
-                  onClick={() => showNotification("tl")}
-                >
-                  Top Left
-                </Button>
-                <Snackbar
-                  place="tl"
-                  color="info"
-                  icon={AddAlert}
-                  message="Welcome to MATERIAL DASHBOARD React - a beautiful freebie for every web developer."
-                  open={tl}
-                  closeNotification={() => setTL(false)}
-                  close
-                />
-              </GridItem>
-              <GridItem xs={12} sm={12} md={4}>
-                <Button
-                  fullWidth
-                  color="primary"
-                  onClick={() => showNotification("tc")}
-                >
-                  Top Center
-                </Button>
-                <Snackbar
-                  place="tc"
-                  color="info"
-                  icon={AddAlert}
-                  message="Welcome to MATERIAL DASHBOARD React - a beautiful freebie for every web developer."
-                  open={tc}
-                  closeNotification={() => setTC(false)}
-                  close
-                />
-              </GridItem>
-              <GridItem xs={12} sm={12} md={4}>
-                <Button
-                  fullWidth
-                  color="primary"
-                  onClick={() => showNotification("tr")}
-                >
-                  Top Right
-                </Button>
-                <Snackbar
-                  place="tr"
-                  color="info"
-                  icon={AddAlert}
-                  message="Welcome to MATERIAL DASHBOARD React - a beautiful freebie for every web developer."
-                  open={tr}
-                  closeNotification={() => setTR(false)}
-                  close
-                />
-              </GridItem>
-            </GridContainer>
-          </GridItem>
-        </GridContainer>
-        <GridContainer justify={"center"}>
-          <GridItem xs={12} sm={12} md={10} lg={8}>
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={4}>
-                <Button
-                  fullWidth
-                  color="primary"
-                  onClick={() => showNotification("bl")}
-                >
-                  Bottom Left
-                </Button>
-                <Snackbar
-                  place="bl"
-                  color="info"
-                  icon={AddAlert}
-                  message="Welcome to MATERIAL DASHBOARD React - a beautiful freebie for every web developer."
-                  open={bl}
-                  closeNotification={() => setBL(false)}
-                  close
-                />
-              </GridItem>
-              <GridItem xs={12} sm={12} md={4}>
-                <Button
-                  fullWidth
-                  color="primary"
-                  onClick={() => showNotification("bc")}
-                >
-                  Bottom Center
-                </Button>
-                <Snackbar
-                  place="bc"
-                  color="info"
-                  icon={AddAlert}
-                  message="Welcome to MATERIAL DASHBOARD React - a beautiful freebie for every web developer."
-                  open={bc}
-                  closeNotification={() => setBC(false)}
-                  close
-                />
-              </GridItem>
-              <GridItem xs={12} sm={12} md={4}>
-                <Button
-                  fullWidth
-                  color="primary"
-                  onClick={() => showNotification("br")}
-                >
-                  Bottom Right
-                </Button>
-                <Snackbar
-                  place="br"
-                  color="info"
-                  icon={AddAlert}
-                  message="Welcome to MATERIAL DASHBOARD React - a beautiful freebie for every web developer."
-                  open={br}
-                  closeNotification={() => setBR(false)}
-                  close
-                />
-              </GridItem>
-            </GridContainer>
+      </CardBody>
+      <br />
+      <CardHeader color="primary">
+        <h4 className={classes.cardTitleWhite}>Contact us for any special cases</h4>
+      </CardHeader>
+      <CardBody>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
+            <SnackbarContent message={"Email – info.delivo@gmai.com"} />
+            <SnackbarContent message={"Phone – 076 384 8989"} />
           </GridItem>
         </GridContainer>
       </CardBody>
